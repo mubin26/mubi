@@ -5,7 +5,7 @@
 #include<ctype.h>
 #include<stdbool.h>
  
-int reg_usr(char str[])
+int reg_usr(char *str)
 {
     //char* str;
     int i=0,len=0;
@@ -33,10 +33,13 @@ int reg_usr(char str[])
     }
     
 }    
-void validate_buffer(char cBuffer[100]){
+void validate_buffer(char *cBuffer){
 	bool flag1 = false;
-	char cName[100],cMailid[100],command[100];
+	char *cName,*cMailid,*command;
 	int i=0,j=0;
+	cName=(char *)malloc(150*(sizeof(char)));
+	cMailid=(char *)malloc(150*(sizeof(char)));
+	command=(char *)malloc(150*(sizeof(char)));
 	printf("cbuffer=%s",cBuffer);
 	if(cBuffer[0]!='\n'){
 
@@ -61,7 +64,9 @@ void validate_buffer(char cBuffer[100]){
 			cMailid[j++] = cBuffer[i++];
 
 		cMailid[j]='\0';
-		//printf("\ncMailid =>%s",cMailid);
+		/*printf("\ncMailid =>%s",cMailid);
+		printf("\n name len=%d",strlen(cName));
+		 printf("\n mailid len=%d",strlen(cMailid));*/
 
 		if(strlen(command)!=0){
 			command_validation(command);
@@ -80,15 +85,18 @@ void validate_buffer(char cBuffer[100]){
 				}
 			}
 		}
+		else{
+			printf("\n no name ");
+		}
 
 		if(flag1==true)
 			printf("\nname invalid");
-		 
+		 printf("\n email validation started");
 		email_validation(cMailid);
 	}
      }
 
-void command_validation(char str[100])
+void command_validation(char *str)
 {
 	int status=0,i=0,jee=0;
 	int len=strlen(str);
@@ -109,18 +117,23 @@ void command_validation(char str[100])
 
 }
 
-void email_validation(char mail[100])
+void email_validation(char *mail)
 {
-    printf("\nmail id %s",mail);
-    const char* pattern = "[a-zA-Z0-9_-].+@[a-z]+.com";
-    regex_t re;
+	printf("\n length of mail=%d",strlen(mail));
+	if(strlen(mail)!=1){
+	    printf("\nmail id %s",mail);
+	    const char* pattern = "[a-zA-Z0-9_-].+@[a-z]+.com";
+	    regex_t re;
 
-    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
+	    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
 
-    int status = regexec(&re, mail, 0, NULL, 0);
-    regfree(&re);
+	    int status = regexec(&re, mail, 0, NULL, 0);
+	    regfree(&re);
 
-    if (status != 0)
-        printf("%s invalid mail id",mail);
-    
+	    if (status != 0)
+        	printf("%s invalid mail id",mail);
+	}
+	else{
+		printf("\n no mail id");
+	}
 }

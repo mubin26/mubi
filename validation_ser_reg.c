@@ -4,11 +4,13 @@
 #include <regex.h>
 #include<ctype.h>
 #include<stdbool.h>
-#include"validation.h"
+#include "validation.h"
 void main()
 {
 	int opt=0,len=0,i=0;
-	char cBuffer[100],command[100];
+	char *cBuffer,*command;
+	cBuffer=(char*)malloc(150*sizeof(char));
+	command=(char*)malloc(150*sizeof(char));
 	printf("\n enter buffer");
 	gets(cBuffer);
 	len=strlen(cBuffer);
@@ -27,7 +29,7 @@ void main()
 			reg_usr(cBuffer);
 		}
 		else if(strcmp(command,"REG_SVC")==0){
-			
+			printf("\n reg_svc matched");
 			reg_svc(cBuffer);
 		}
 		else{

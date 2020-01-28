@@ -5,16 +5,13 @@
 #include<ctype.h>
 #include<stdbool.h>
  
-void  reg_svc(char str[])
+void  reg_svc(char *str)
 {
-    //char* str;
     int i=0,len=0;
-   // str=(char*)malloc(100*sizeof(char));
-    //gets(str);
     len=strlen(str);
     str[len]='\0';
     printf("\n len=%d",len);
-    const char* pattern = "[A-Z_]+:[a-zA-Z ]+,[a-zA-Z ]+,[a-zA-Z ]";
+    const char* pattern = "[A-Z_]+:[a-zA-Z ]+,[a-zA-Z ]+,[a-zA-Z ]+,[0-9]";
     regex_t re;
 	
     if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
@@ -33,10 +30,15 @@ void  reg_svc(char str[])
     }
     
 }    
-void svc_validate_buffer(char cBuffer[100]){
-	bool flag1 = false,flag2=false,flag3=false;
-	char sName[100],sType[100],sStatus[100],command[100];
-	int i=0,j=0;
+void svc_validate_buffer(char *cBuffer){
+	bool flag1 = false,flag2=false,flag3=false,flag4=false;
+	char *sName,*sType,*sStatus,*command,*Uid;
+	sName=(char*)malloc(150*sizeof(char));
+	sType=(char*)malloc(150*sizeof(char));
+	sStatus=(char*)malloc(150*sizeof(char));
+	command=(char*)malloc(150*sizeof(char));
+	Uid=(char*)malloc(150*sizeof(char));
+	int i=0,j=0,count=0;
 	printf("cbuffer=%s",cBuffer);
 	if(cBuffer[0]!='\n'){
 
@@ -74,13 +76,13 @@ void svc_validate_buffer(char cBuffer[100]){
 		  printf("\nsstatus =>%s",sStatus);
 		  printf("\n length of stype=%d",strlen(sType));
 		   printf("\n length of sstatus=%d",strlen(sStatus));
-		    printf("\n length of sname=%d",strlen(sName));
+		    printf("\n length of sname=%d",strlen(sName));*/
 
-		if(strlen(command)!=0){
-			command_validation(command);
+		
+		 while(cBuffer[i] != '\0')
+                        Uid[j++] = cBuffer[i++];
 
-		}*/
-
+                Uid[j]='\0';
 
 		if(strlen(sName)!=0){
 			for(i=0;sName[i]!='\0';i++){
@@ -119,7 +121,6 @@ void svc_validate_buffer(char cBuffer[100]){
                 if(flag2==true)
                         printf("\nservice type invalid");
 
-		//email_validation(cMailid);
 		 if(strlen(sStatus)!=1){
                         for(i=0;sStatus[i]!='\0';i++){
                                 if(isalpha(sStatus[i]) || sStatus[i]==' '){
@@ -138,6 +139,28 @@ void svc_validate_buffer(char cBuffer[100]){
 
                 if(flag3==true)
                         printf("\nservice status invalid");
+
+		 if(strlen(Uid)!=1){
+                        for(i=0;Uid[i]!='\0';i++){
+                                if(isdigit(Uid[i])){
+					count++;
+                                        continue;
+                                }
+                                else{
+                                        flag1=true;
+                                        break;
+                                }
+                        }
+                }
+                else{
+                        printf("\n no uid");
+                }
+
+                if(flag4==true)
+                        printf("\nuid invalid");
+		if(count!=4)
+			printf("\n uid must be 4 digit ,pls enter valid uid");
+
 
 	}
      }
