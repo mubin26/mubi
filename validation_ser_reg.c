@@ -5,35 +5,72 @@
 #include<ctype.h>
 #include<stdbool.h>
 #include "validation.h"
-void main()
+#define MAX 255
+int main_validation(char *cBuffer)
 {
-	int opt=0,len=0,i=0;
-	char *cBuffer,*command;
-	cBuffer=(char*)malloc(150*sizeof(char));
-	command=(char*)malloc(150*sizeof(char));
-	printf("\n enter buffer");
-	gets(cBuffer);
+	int len=0,i=0,val_command=0;
+	char *command = NULL;
+	bool flag1=false;
+	command=(char*)malloc(MAX*sizeof(char));
 	len=strlen(cBuffer);
-	if(len==0)
-		printf("\n no input");
+	if(len==1)
+		printf("\n Please,Enter command\n");
 	else{
-		while(cBuffer[i] != ':'){
-			command[i] = cBuffer[i];
-			i++;
+		while(cBuffer[i] != ':') {
+			if(i<len){
+				command[i] = cBuffer[i];
+				i++;
+			}
+			else{
+				printf("\n Sorry,Give proper command\n");
+				flag1=true;
+				break;
+			}
 		}
+		if(flag1==false){
+			val_command=command_checking(command);
+			if(val_command==1){
+				command[i]='\0';
+			}
+			else{
+				printf("\n Please Enter valid command\n");
+			}
 
-		command[i]='\0';
-		printf("\n command=%s",command);
-		if(strcmp(command,"REG_USR")==0){
+
+			if(strcmp(command,"REG_USR")==0){
 			
-			reg_usr(cBuffer);
+				 return reg_usr_validation(cBuffer);
+			}
+			else if(strcmp(command,"REG_SVC")==0){
+				return reg_svc_validation(cBuffer);
+			}
+			else{
+				printf("\n Sorry,Please check your command \n");
+			}
+
 		}
-		else if(strcmp(command,"REG_SVC")==0){
-			printf("\n reg_svc matched");
-			reg_svc(cBuffer);
-		}
-		else{
-			printf("\n no proper input");
-		}
-	}
+	}	
+		free(command);
+}
+
+int command_checking(char *str)
+{
+	bool flag1=false;
+	int i=0;
+		for(i=0;i<strlen(str);i++){
+                                if((isupper(str[i])) || (str[i]=='_')){
+                                        continue;
+                                }
+                                else{
+                                        flag1=true;
+                                        break;
+                                }
+                        }
+		
+
+        	 if (flag1==false) 
+                	return 1;
+         	 
+		 else
+			 return 0;
 }
