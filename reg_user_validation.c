@@ -11,16 +11,17 @@ int reg_usr_validation(char *str)
     int i=0,len=0,rv=0;
     len=strlen(str);
     str[len]='\0';
-    const char* pattern = "[A-Z_]+:[a-zA-Z]+,[a-zA-Z0-9_-].+@[a-z]+.[a-z.]";
+    const char* pattern = "[A-Z_]+:[a-zA-Z]+,[a-zA-Z0-9_-].+@[a-z]+.com";
     regex_t re;
 	
     if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
 
     int status = regexec(&re, str, 0, NULL, 0);
     regfree(&re);
+
+
 	 if (status == 0) {
 		 rv=length_checking(str);
-		 printf("\n return value=%d",rv);
 		 if(rv==1)
 			return rv;
 		 else if(rv==2){
@@ -28,11 +29,11 @@ int reg_usr_validation(char *str)
 			 return 0;
 		 }
 		 else if(rv==3){
-			 printf("\nSorry,mail id must be maximum of 17 characters\n");
+			 printf("\nSorry,Please enter valid mail id,it must be maximum of 35 characters\n");
                          return 0;
 		 }
 		 else if(rv==4){
-			 printf("\n Sorry,user name must be maximum of 12 characters & mail id must be maximum of 17 characters");
+			 printf("\n Sorry,user name must be maximum of 12 characters & mail id must be maximum of 35 characters");
 			 return 0;
 		 }
      	 }
@@ -69,6 +70,8 @@ void validate_buffer(char *cBuffer){
 		else{
 			name_flag=true;
 		}
+
+
 		if(name_flag==false){
 			if((name_len<13) && (name_len>0)){
 				cName[j]='\0';
@@ -81,24 +84,25 @@ void validate_buffer(char *cBuffer){
 		j=0;
 
 		if(i<strlen(cBuffer)){
-			while((cBuffer[i] != NULL) && (i<strlen(cBuffer))){
+			while((cBuffer[i] != '\n') && (i<strlen(cBuffer))){
 				cMailid[j++] = cBuffer[i++];
 			}
+			cMailid[j]='\0';
 			mailid_len=strlen(cMailid);
 		}
 		else{
 			mailid_flag=true;
 		}
-
 		if(mailid_flag==false){
-			if((mailid_len<18) && (mailid_len>0)){
-        	                cMailid[j]='\0';
+			if((mailid_len<38) && (mailid_len>0)){
                 	        email_validation(cMailid);
                 	}
 	                else{
-        	                printf("\n Sorry,Mail id must be maximum of 17 characters\n");
+        	                printf("\n Sorry,Mail id must be maximum of 35 characters\n");
                 	}
 		}
+
+
 
 
 		if(name_flag==false){
@@ -130,15 +134,16 @@ void validate_buffer(char *cBuffer){
 
 void email_validation(char *mail)
 {
-	
-	    const char* pattern = "[a-zA-Z0-9_-].+@[a-z]+.[a-z.]";
+	    const char* pattern = "[a-zA-Z0-9_-].+@[a-z].+.com";
 	    regex_t re;
-
 	    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
-
+	    
 	    int status = regexec(&re, mail, 0, NULL, 0);
 	    regfree(&re);
-
+		printf("\n mail[0]=%s",mail[0]);
+	    if(isalpha(mail[0]) == 0)
+		    status=1;
+	    
 	    if (status != 0)
         	printf("\n Please enter valid mail id\n");
 }
@@ -181,11 +186,20 @@ int length_checking(char *cBuffer)
                         }
                         mailid_len=strlen(cMailid);
                 }
-		printf("\n name len=%d,mail len=%d",name_len,mailid_len);
+
+
 		if((name_len<13) && (name_len>0))
 			name=true;
-		if((mailid_len<18) && (mailid_len>0))
+		if((mailid_len<38) && (mailid_len>0))
 			mailid=true;
+
+            if(isalpha(cMailid[0]) != 0)
+                    mailid=true;
+            else{
+                    mailid=false;
+            }
+
+
 		if((name==true) && (mailid==true))
 			return 1;
 		else if((name==false) && (mailid==true))

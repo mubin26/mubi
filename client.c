@@ -15,7 +15,7 @@
 int client()
 {
 
-	int sock_fd=0,msg_len=0,val=0;
+	int sock_fd=0,msg_len=0,val=0,uid=0,ibuffer=0;
 	struct sockaddr_in servaddr;
 	char buffer[max];
 	sock_fd=socket(AF_INET,SOCK_STREAM,0);
@@ -35,11 +35,14 @@ int client()
 			break;
 		}
 		else{
-			val=main_validation(buffer);
+			val=main_validation(buffer,uid);
 			if(val==1){
 				send(sock_fd,buffer,max,0);
 				memset(&buffer,0,sizeof(buffer));
 				msg_len=recv(sock_fd,buffer,max,0);
+				ibuffer=atoi(buffer);
+				if((ibuffer>=1001) && (ibuffer<=3000))
+					uid=ibuffer;
 				id_validation(buffer);
 			}
 		}

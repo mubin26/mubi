@@ -6,7 +6,7 @@
 #include<stdbool.h>
 #include "validation.h"
 #define MAX 255
-int main_validation(char *cBuffer)
+int main_validation(char *cBuffer,int uid)
 {
 	int len=0,i=0,val_command=0;
 	char *command = NULL;
@@ -18,8 +18,8 @@ int main_validation(char *cBuffer)
 	else{
 		while(cBuffer[i] != ':') {
 			if(i<len){
-				command[i] = cBuffer[i];
-				i++;
+				command[i++] = cBuffer[i];
+				
 			}
 			else{
 				printf("\n Sorry,Give proper command\n");
@@ -42,7 +42,7 @@ int main_validation(char *cBuffer)
 				 return reg_usr_validation(cBuffer);
 			}
 			else if(strcmp(command,"REG_SVC")==0){
-				return reg_svc_validation(cBuffer);
+				return reg_svc_validation(cBuffer,uid);
 			}
 			else{
 				printf("\n Sorry,Please check your command \n");
