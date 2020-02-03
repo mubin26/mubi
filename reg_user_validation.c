@@ -84,7 +84,7 @@ void validate_buffer(char *cBuffer){
 		j=0;
 
 		if(i<strlen(cBuffer)){
-			while((cBuffer[i] != '\n') && (i<strlen(cBuffer))){
+			while((cBuffer[i] != NULL) && (i<strlen(cBuffer))){
 				cMailid[j++] = cBuffer[i++];
 			}
 			cMailid[j]='\0';
@@ -140,8 +140,7 @@ void email_validation(char *mail)
 	    
 	    int status = regexec(&re, mail, 0, NULL, 0);
 	    regfree(&re);
-		printf("\n mail[0]=%s",mail[0]);
-	    if(isalpha(mail[0]) == 0)
+	    if(isalpha(mail[0]) != 0)
 		    status=1;
 	    
 	    if (status != 0)
